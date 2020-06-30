@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div id="content" class="container">
+    {%- for namespace in namespace %}
+    <p>
+    <h2>Cluster: {{ namespace }}</h2></p>
+    <h6>
+        <table class="table">
+            <thead class="thead-dark">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Имя приложения</th>
+                <th scope="col">Запрошенные реплики</th>
+                <th scope="col">Работающие реплики</th>
+                <th scope="col">Недоступные реплики</th>
+                <th scope="col">Получить информацию</th>
+                <th scope="col">Произвести рестарт</th>
+                <th scope="col">Запустить сервис</th>
+                <th scope="col">Остановить сервис</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                {% for key, value in data[namespace].items() %}
+                <th scope="row">{{ key }}</th>
+                {% for row in value[0:8] %}
+                {% if row == "get_info" %}
+                <td>
+                    <form id="get_template_info" method="post" action="/view">
+                        <button class="btn btn-primary" name="get_pods"  value="{{ namespace }} {{ value[0] }} {{ value[8] }}">Get info</button>
+                    </form>
+                </td>
+                {% elif row == "restart" %}
+                <td>
+                    <form method="post" action="/">
+                        <button class="btn btn-primary" name="do_deployment_restart" value="{{ value[0] }}">Restart</button>
+                        <input name="service" value="{{ label }}" hidden />
+                    </form>
+                </td>
+                {% elif row == "stop" %}
+                <td>
+                    <form method="post" action="/">
+                        <button class="btn btn-primary" name="do_deployment_stop" value="{{ value[8] }}">Stop</button>
+                        <input name="service" value="{{ label }}" hidden />
+                    </form>
+                </td>
+                {% elif row == "start" %}
+                <td>
+                    <form method="post" action="/">
+                        <button class="btn btn-primary" name="do_deployment_start" value="{{ value[8] }}">Start</button>
+                        <input name="service" value="{{ label }}" hidden />
+                    </form>
+                </td>
+                {% else %}
+                <td>{{ row }}</td>
+                {% endif %}
+                {% endfor %}
+            </tr>
+            </tbody>
+            {% endfor %}
+        </table>
+    </h6>
+    {%- endfor %}
+</div>
+
+{% endblock %}

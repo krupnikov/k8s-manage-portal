@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% if data is defined %}
+<div id="content" class="container">
+    <table class="table">
+        <thead class="thead-dark">
+        <tr>
+            <th scope="col">#</th>
+            <th>NAME</th>
+            <th>NODE</th>
+            <th>STATUS</th>
+            <th>RESTARTS</th>
+            <th>AGE</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+
+            {% for key, value in data.items() %}
+            <th scope="row">{{ key }}</th>
+            <td>
+                <p>{{ value.name }}</p>
+            </td>
+            <td>
+                <p>HOST: {{ value.node[0] }}</p>
+                <p>IP: {{ value.node[1] }}</p>
+            </td>
+            <td>{{ value.status }}</td>
+            <td>{{ value.restarts }}</td>
+            <td>{{ value.age }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <ul class="nav nav-tabs" id="metaInfo" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="deployment-tab" data-toggle="tab" href="#deployment" role="tab"
+               aria-controls="deployment" aria-selected="true">Deployment</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="configmap-tab" data-toggle="tab" href="#configmap" role="tab"
+               aria-controls="configmap" aria-selected="false">Configmap</a>
+        </li>
+    </ul>
+    <div class="tab-content" id="TabContent">
+        <div class="tab-pane fade show active" id="deployment" role="tabpanel" aria-labelledby="deployment-tab">
+            <pre class="pre-scrollable">
+                <p class="alert alert-dark">{{ deployment }}</p>
+            </pre>
+            <form id="create_file" action="/downloadfile/{{ deployment_name }}" method="post">
+                <button class="btn btn-outline-primary" name="create_file" value="{{ tmpdir }}">Save to yaml</button>
+            </form>
+        </div>
+        <div class="tab-pane fade" id="configmap" role="tabpanel" aria-labelledby="configmap-tab">
+            <form action="/view/update-configmap" method="post">
+                <textarea name="update_configmap" type="text" class="md-textarea form-control"
+                          rows="14">{{ configmap.data_value }}</textarea>
+                <button name="configmap_cred" class="btn  btn-outline-primary" value="{{ configmap.namespace }} {{ configmap.name }} {{ configmap.data_key }}">Update ConfigMap</button>
+                <button name="pod_restart" class="btn  btn-outline-primary" value="{{ configmap.namespace }} {{ configmap.name }} {{ configmap.data_key }} {{ deployment_name }}">Update and Restart</button>
+            </form>
+        </div>
+    </div>
+    {% endif %}
+    <br/>
+</div>
+{% endblock %}

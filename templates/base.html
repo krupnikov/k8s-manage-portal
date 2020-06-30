@@ -1,0 +1,79 @@
+{% extends "bootstrap/base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "bootstrap/pagination.html" as pagination %}
+{% import "bootstrap/utils.html" as util %}
+
+{% block head %}
+{{super()}}
+{% endblock %}
+
+{% block body %}
+
+{% block scripts %}
+<script src="{{bootstrap_find_resource('jquery.js', cdn='jquery')}}" xmlns="http://www.w3.org/1999/html"></script>
+<script src="{{bootstrap_find_resource('js/bootstrap.js', cdn='bootstrap')}}"></script>
+{%- endblock scripts %}
+
+<div class="container">
+    <nav class="navbar navbar-light" style="background-color: #e3f2fd;">
+        <div>
+            <div class="navbar-header">
+                <a class="navbar-brand" href="/">Главная</a>
+            </div>
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="/">Go to main page</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div id="input" class="input-group mb-3">
+        <form id="service" method="post" action="/" class="form-control">
+            <div class="input-group-prepend">
+                <select class="container" id="serviceList" name="service">
+                    <option value="all">all</option>
+                    <option value="prod-ipev">prod-ipev</option>
+                    <option value="prod-mhpd">prod-mhpd</option>
+                    <option value="uat-ipev">uat-ipev</option>
+                    <option value="uat-mhpd">uat-mhpd</option>
+                    <option value="mhpd-access">mhpd-access</option>
+                    <option value="mhpd-gateway-etpmv">mhpd-gateway-etpmv</option>
+                    <option value="mhpd-merge">mhpd-merge</option>
+                    <option value="mhpd-quality">mhpd-quality</option>
+                    <option value="mhpd-quality-nginx">mhpd-quality-nginx</option>
+                    <option value="phd-access">phd-access</option>
+                    <option value="phd-access-nginx">phd-access-nginx</option>
+                    <option value="posf-gateway-odopm">posf-gateway-odopm</option>
+                    <option value="posf-access-audit">posf-access-audit</option>
+                    <option value="posf-access-audit-nginx">posf-access-audit-nginx</option>
+                    <option value="posf-access-ui-audit">posf-access-ui-audit</option>
+                    <option value="posf-access-ui-audit-nginx">posf-access-ui-audit-nginx</option>
+                    <option value="posf-quality">posf-quality</option>
+                    <option value="posf-quality-nginx">posf-quality-nginx</option>
+                    <option value="posf-rr-processor">posf-rr-processor</option>
+                    <option value="posf-dictionaries">posf-dictionaries</option>
+                </select>
+                <button class="btn btn-outline-secondary" type="submit"/>
+                GET</button
+            </div>
+        </form>
+    </div>
+</div>
+<div>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-warning alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                aria-hidden="true">×</span>
+        </button>
+        {{ message }}
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+</div>
+
+{% block content %}{% endblock %}
+{% endblock %}
